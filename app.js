@@ -2,12 +2,14 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const dotenv = require('dotenv');
+const cookieParser = require('cookie-parser')
 const mongoose = require('mongoose');
 const expressValidator = require('express-validator');
 dotenv.config();
 
 //Bring Routers
 const postRoutes = require('./routes/post')
+const authRoutes = require('./routes/auth')
 
 
 
@@ -30,9 +32,11 @@ app.use(express.urlencoded({
 }));
 app.use(morgan('dev'));
 app.use(expressValidator());
+app.use(cookieParser());
 
 
 app.use("/", postRoutes); 
+app.use("/", authRoutes); 
 
 
 const port = process.env.PORT || 8080

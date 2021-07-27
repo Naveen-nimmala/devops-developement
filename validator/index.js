@@ -19,3 +19,30 @@ exports.createPostValidator = (req, res, next) => {
     }
     next();
 }
+
+exports.userSignupValidator = (req, res, next) => {
+
+    //Name validator 
+    req.check("name", "Name is required").notEmpty()
+
+    //Email validator
+    req.check("email", "Email must be between 3 to 32 characters").isEmail().isLength({
+        min: 4,
+        max: 32
+    })
+    //Password validator
+    req.check(
+        'password',
+        'Please enter a password with 6 or more characters'
+    ).isLength({ min: 6 })
+
+    //check errors
+
+    const errors = req.validationErrors()
+    if (errors){
+        const firstError = errors.map(err => err.msg)[0]
+        return res.status(400).json({error: firstError })
+    }
+    next();
+
+}
